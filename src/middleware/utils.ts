@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 
 export const PoweredBy = (req: Request, resp: Response, next: NextFunction) => {
+  resp.locals.name = "Ts-Express!";
   resp.header({
     "x-powered-by": "PHP",
-    author: "ONADEBI",
-  }),
-    next();
+    author: "Onadebi",
+  });
+  console.log("Calling path is: ", req.url);
+  next();
 };
