@@ -2,11 +2,10 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 
-
 async function ExtractReadMe(): Promise<string> {
   let content = new Promise<string>(async (resolve, reject) => {
     fs.readFile(
-        path.join(__dirname,'../../ReadMe.md'),
+      path.join(__dirname, "../../ReadMe.md"),
       {
         encoding: "utf-8",
       },
@@ -27,8 +26,9 @@ async function ExtractReadMe(): Promise<string> {
 const routes = express.Router();
 
 routes.get("/", async (req, resp) => {
-  ExtractReadMe().then(data => resp.send(`Router response from ReadMe.md>> ${data}`))
-  .catch(err=> resp.status(404).send(`Router response: ${err}`));
+  ExtractReadMe()
+    .then((data) => resp.send(`Router response from ReadMe.md>> ${data}`))
+    .catch((err) => resp.status(404).send(`Router response: ${err}`));
 });
 
 routes.get("/err", (req, res) => {
