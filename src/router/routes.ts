@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
+import goalRouter from "../applications/goals/goals.controller";
 
 async function ExtractReadMe(): Promise<string> {
   let content = new Promise<string>(async (resolve, reject) => {
@@ -34,5 +35,7 @@ routes.get("/", async (req, resp) => {
 routes.get("/err", (req, res) => {
   throw new Error();
 });
+
+routes.use('/api/goals', goalRouter);
 
 export default routes;
