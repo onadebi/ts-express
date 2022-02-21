@@ -1,6 +1,8 @@
 import express, {Express, Request} from "express";
 import cors from "cors";
+import { dbConfig } from "./databases/dbConfig";
 
+dbConfig().catch(err=> console.log(`Server Error connecting to db`));
 const app = express();
 
 export const server = (): Express => {
