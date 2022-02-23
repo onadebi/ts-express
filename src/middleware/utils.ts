@@ -6,6 +6,6 @@ export const PoweredBy = (req: Request, resp: Response, next: NextFunction) => {
     "x-powered-by": "PHP",
     author: "Onadebi",
   });
-  console.log("Calling path is: ", req.url);
+  console.log(`Calling path is: [${req.method}] ${req.url}`);
   next();
 };

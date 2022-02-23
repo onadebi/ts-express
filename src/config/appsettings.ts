@@ -12,5 +12,8 @@ export const appsettings ={
         database: process.env.DB_DATABASE,
         synchronize: true,
         logging:true
+    },
+    GoalsConfig:{
+        minGoalsLength: 3
     }
 }

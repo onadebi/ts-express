@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import Goals from "../applications/goals/goals.model";
 import Users from "../applications/users/models/User";
 import { appsettings } from "../config/appsettings";
 
@@ -12,7 +13,7 @@ export const dbConfig =() => createConnection({
     password: appsettings.db_connection.password,
     database: appsettings.db_connection.database,
     entities: [
-        Users
+        Users, Goals
     ],
     synchronize: appsettings.db_connection.synchronize,
     logging: appsettings.db_connection.logging
