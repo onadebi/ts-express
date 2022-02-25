@@ -18,12 +18,16 @@ export class GoalsRepository extends Repository<Goals>{
             const newGoal = new Goals();
             newGoal.text = goal.text;
             const userRepo = getRepository(Goals);
-            const result  = await userRepo.save(goal);
-            if(result){
-                return resolve(GenResponse.Result<IGoal>(result, true,StatusCode.ServerError));
-            }
+            userRepo.save(goal).then((result)=>{
+                if(result){
+                    return resolve(GenResponse.Result<IGoal>(result, true,StatusCode.Created));
+                }
+            }).catch((error)=>{
+                console.log(`[GoalsRepository][CreateGoal] ERROR:: ${error}`);
+                return resolve(GenResponse.Result<IGoal|null>(null,false,StatusCode.ServerError,"An error occured. Kindly try again."));
+            });
         }).catch((error)=> {
-            console.log(`[UserRepository][CreateGoal] ERROR:: ${error}`);
+            console.log(`[GoalsRepository][CreateGoal] ERROR:: ${error}`);
             return GenResponse.Result<IGoal|null>(null,false,StatusCode.ServerError,"An error occured. Kindly try again.");
         })
         return objResult;
@@ -41,7 +45,7 @@ export class GoalsRepository extends Repository<Goals>{
                 objResult = GenResponse.Result<IGoal[]|null>(null, false);
             }
         } catch (error) {
-            console.log(`[UserRepository][GetAllGoals] ERROR:: ${error}`);
+            console.log(`[GoalsRepository][GetAllGoals] ERROR:: ${error}`);
             objResult = GenResponse.Result<IGoal[]|null>(null, false);
         }
         return objResult;
@@ -59,7 +63,7 @@ export class GoalsRepository extends Repository<Goals>{
                 resolve(GenResponse.Result<IGoal|null>(null,false,StatusCode.NotFound,"Goal not found"))
             }
         }).catch((error)=>{
-            console.log(`[UserRepository][GetGoalById] ERROR:: ${error}`);
+            console.log(`[GoalsRepository][GetGoalById] ERROR:: ${error}`);
             return GenResponse.Result<IGoal|null>(null,false,StatusCode.ServerError,"Ann error occured")
         });
         return objResult;
@@ -93,7 +97,7 @@ export class GoalsRepository extends Repository<Goals>{
             }
             
         } catch (error) {
-            console.log(`[UserRepository][GetAllGoals] ERROR:: ${error}`);
+            console.log(`[GoalsRepository][GetAllGoals] ERROR:: ${error}`);
             objResult = GenResponse.Result<IGoal|null>(null, false,StatusCode.ServerError,null);
         }
         return objResult;
@@ -114,7 +118,7 @@ export class GoalsRepository extends Repository<Goals>{
                 objResult = GenResponse.Result<null>(null, false,StatusCode.NoChanges,'Goal record not found for deletion!');
             }
         } catch (error) {
-            console.log(`[UserRepository][GetAllGoals] ERROR:: ${error}`);
+            console.log(`[GoalsRepository][GetAllGoals] ERROR:: ${error}`);
             objResult = GenResponse.Result<null>(null, false,StatusCode.ServerError,'Goal record not deleted!');
         }
         return objResult;

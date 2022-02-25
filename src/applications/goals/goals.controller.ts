@@ -13,12 +13,11 @@ type GoalType ={
     text: string;
 }
 
-
 goalRouter.get('/',async (req:Request, resp: Response)=>{
     const allGoals = await GetRepo().GetAllGoals();
     resp.status(allGoals.StatusCode).json(allGoals);
 })
-.post('/', async (req:Request<any,any, {text: string},any>, resp: Response)=>{
+.post('/', async (req:Request<any,any, IGoal,any>, resp: Response)=>{
     const goal = req.body;
     const objResult = await getCustomRepository(GoalsRepository).CreateGoal(goal);
     return resp.status(objResult.StatusCode).json(objResult);

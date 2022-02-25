@@ -1,39 +1,39 @@
 import express, { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import User from '../users/models/User';
-import Users from '../users/models/User';
+import Users from './users.model';
+
 
 const usersRoute = express.Router()
 
 
 usersRoute.get('/',async (req:Request, resp: Response)=>{
     
-    const userRepo = getRepository(User);
+    const userRepo = getRepository(Users);
     
     const user = new Users();
     user.firstName = "Onaxsys";
     user.lastName = "Edebi";
-    user.age = 30;
+    user.email= 'onaefe@gmail.com';
     await userRepo.save(user);
 
     const allUsers = await userRepo.find();
     resp.status(200).json(allUsers);
 })
-.post('/', (req:Request, resp: Response)=>{
+
+
+usersRoute.get('/register', (req:Request, resp: Response)=>{
     resp.status(200).json({message: 'Create user'});
 });
 
 
-usersRoute.get('/:id', (req:Request<{id: string}>, resp: Response)=>{
-    const id = req.params.id;
-    resp.status(200).json({message: `Get user of id ${id}`});
-})
-.put('/:id', (req:Request, resp: Response)=>{
-    resp.status(200).json({message: 'Update user '+ req.params.id});
-})
-.delete('/:id', (req:Request, resp: Response)=>{
-    const id = req.params.id;  
-    resp.status(200).json({message: `Delete user of id ${id}`});
+usersRoute.get('/login',(req,res)=>{
+    res.json({'message': 'login'})
 });
+
+
+usersRoute.get('/:me', (req:Request<{me: string}>, resp: Response)=>{
+    const me = req.params.me;
+    resp.status(200).json({message: `Get user of id ${me}`});
+})
 
 export default usersRoute;

@@ -15,5 +15,9 @@ export const appsettings ={
     },
     GoalsConfig:{
         minGoalsLength: 3
+    },
+    encryption:{
+        length: 10,
+        secreteKey: process.env.SECRETE_KEY
     }
 }
