@@ -54,9 +54,9 @@ export class GoalsRepository extends Repository<Goals>{
 
     GetGoalById = async(id:number): Promise<GenResponse<IGoal|null>>=>{
         const objResult = new Promise<GenResponse<IGoal|null>>(async (resolve, reject)=>{
-            const result = await this.createQueryBuilder(GoalVariables.goalTableName)
-            .where(`${GoalVariables.goalTableName}.id = :id`, {id})
-            .andWhere(`${GoalVariables.goalTableName}.is_deleted = 0`).getOne();
+            const result = await this.createQueryBuilder(GoalVariables.TableName)
+            .where(`${GoalVariables.TableName}.id = :id`, {id})
+            .andWhere(`${GoalVariables.TableName}.is_deleted = 0`).getOne();
             if(result){
                 resolve(GenResponse.Result<IGoal|null>(result,true,StatusCode.OK,null))
             }else{
@@ -81,7 +81,7 @@ export class GoalsRepository extends Repository<Goals>{
                 if(!_goalExists){
                     return GenResponse.Result<null>(null,false, StatusCode.NotFound,`Goal with id ${goal.id} does not exist.`);
                 }else{
-                    const updateResult = await this.createQueryBuilder(GoalVariables.goalTableName).update(Goals).set({
+                    const updateResult = await this.createQueryBuilder(GoalVariables.TableName).update(Goals).set({
                         text: goal.text
                     }).where(`id= :id`,{id : goal.id}).execute();
                     console.log(JSON.stringify(updateResult,null,2))
@@ -91,7 +91,7 @@ export class GoalsRepository extends Repository<Goals>{
                         const newObj = await this._GetRepo().findOne(goal.id);
                         return GenResponse.Result<IGoal>(newObj!, true,StatusCode.OK,null);
                     }else{
-                        return GenResponse.Result<null>(null, false,StatusCode.NoChanges,null);
+                        return GenResponse.Result<null>(null, false,StatusCode.BadRequest,null);
                     }
                 }
             }
@@ -110,12 +110,12 @@ export class GoalsRepository extends Repository<Goals>{
             const goal = await goalRepo.findOne({where :{id}});
             if(goal){
                 if(goal.isDeleted){
-                    return GenResponse.Result<null>(null,false,StatusCode.NoChanges,'Goal record not found!')
+                    return GenResponse.Result<null>(null,false,StatusCode.BadRequest,'Goal record not found!')
                 }
                 goal.isDeleted = true;
                 objResult = GenResponse.Result<null>(null, true,StatusCode.OK,'Goal record deleted!');
             }else{
-                objResult = GenResponse.Result<null>(null, false,StatusCode.NoChanges,'Goal record not found for deletion!');
+                objResult = GenResponse.Result<null>(null, false,StatusCode.BadRequest,'Goal record not found for deletion!');
             }
         } catch (error) {
             console.log(`[GoalsRepository][GetAllGoals] ERROR:: ${error}`);

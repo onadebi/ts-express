@@ -6,7 +6,7 @@ import GoalVariables from "./goal.variables";
 import { BaseTableFields } from "../common/BaseTableFields";
 import Users from "../users/users.model";
 
-@Entity({name: GoalVariables.goalTableName})
+@Entity({name: GoalVariables.TableName})
 export default class Goals extends BaseTableFields implements IGoal {
     @PrimaryGeneratedColumn()
     id!: number;

@@ -15,7 +15,7 @@ class Users extends BaseTableFields {
     @PrimaryGeneratedColumn()
     userid!: number;
 
-    @Column({type: 'varchar', length:50, nullable:true, unique:true})
+    @Column({type: 'varchar', length:50, nullable:false, unique:true})
     username!: string;
 
     @Column({type: 'varchar', length:100, nullable:false, unique:true})

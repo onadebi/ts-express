@@ -1,33 +1,37 @@
 import express, { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
+import GenResponse from '../../config/GenResponse';
+import UserTypeDto from './models/User.types';
 import Users from './users.model';
+import { UserRepository } from './users.service';
 
 
 const usersRoute = express.Router()
 
+function GetRepo() : UserRepository{
+    return getCustomRepository(UserRepository);
+}
 
 usersRoute.get('/',async (req:Request, resp: Response)=>{
-    
-    const userRepo = getRepository(Users);
-    
-    const user = new Users();
-    user.firstName = "Onaxsys";
-    user.lastName = "Edebi";
-    user.email= 'onaefe@gmail.com';
-    await userRepo.save(user);
+    const allUsers = await GetRepo().GetAllUsers();
+    resp.status(allUsers.StatusCode).json(allUsers);
+}); 
 
-    const allUsers = await userRepo.find();
-    resp.status(200).json(allUsers);
-})
+usersRoute.get('/:username',async (req:Request, resp: Response)=>{
+    const user = await GetRepo().GetUserByUsername(req.params.username);
+    resp.status(user.StatusCode).json(user);
+}); 
 
 
-usersRoute.get('/register', (req:Request, resp: Response)=>{
-    resp.status(200).json({message: 'Create user'});
+usersRoute.post('/register', async (req:Request<any,any,UserTypeDto,any>, resp: Response)=>{
+    const newUser = await GetRepo().RegisterUser(req.body);
+    return resp.status(newUser.StatusCode).json(newUser);
 });
 
 
-usersRoute.get('/login',(req,res)=>{
-    res.json({'message': 'login'})
+usersRoute.post('/login',async (req: Request<any,any, UserTypeDto>,res)=>{
+    const objResp = await GetRepo().LoginUser(req.body);
+    res.status(objResp.StatusCode).json(objResp)
 });
 
 
