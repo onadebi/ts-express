@@ -70,7 +70,7 @@ export class UserRepository extends Repository<Users>{
         let objResult: GenResponse<IUser| null>;
         const nameOf = nameOfFactory<Users>();
         try {
-            const user = await this.createQueryBuilder(UserVariables.TableName).select([`${UserVariables.TableName}.username`,`${UserVariables.TableName}.${nameOf('email')}`,`${UserVariables.TableName}.${nameOf('firstName')}`,`${UserVariables.TableName}.${nameOf('lastName')}`]).where(`username = :username`,{username}).limit(1).getOne();
+            const user = await this.createQueryBuilder(UserVariables.TableName).select([`${UserVariables.TableName}.username`,`${UserVariables.TableName}.${nameOf('email')}`,`${UserVariables.TableName}.${nameOf('firstName')}`,`${UserVariables.TableName}.${nameOf('lastName')}`]).where(`username = :username OR email = :email`,{username, email: username}).limit(1).getOne();
             if(user){
                 objResult = GenResponse.Result<IUser>(user, true,StatusCode.OK);
             }

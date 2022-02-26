@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import goalRouter from "../applications/goals/goals.controller";
 import usersRoute from "../applications/users/users.controller";
+import { AuthMidware } from "../middleware/auth.middleware";
 
 async function ExtractReadMe(): Promise<string> {
   let content = new Promise<string>(async (resolve, reject) => {
@@ -37,7 +38,7 @@ routes.get("/err", (req, res) => {
   throw new Error();
 });
 
-routes.use('/api/goals', goalRouter);
+routes.use('/api/goals',AuthMidware, goalRouter);
 routes.use('/api/users', usersRoute);
 
 export default routes;

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { getCustomRepository, getRepository } from 'typeorm';
 import GenResponse from '../../config/GenResponse';
+import { AuthMidware } from '../../middleware/auth.middleware';
 import UserTypeDto from './models/User.types';
 import Users from './users.model';
 import { UserRepository } from './users.service';
@@ -17,10 +18,10 @@ usersRoute.get('/',async (req:Request, resp: Response)=>{
     resp.status(allUsers.StatusCode).json(allUsers);
 }); 
 
-usersRoute.get('/:username',async (req:Request, resp: Response)=>{
-    const user = await GetRepo().GetUserByUsername(req.params.username);
-    resp.status(user.StatusCode).json(user);
-}); 
+// usersRoute.get('/:username',async (req:Request, resp: Response)=>{
+//     const user = await GetRepo().GetUserByUsername(req.params.username);
+//     resp.status(user.StatusCode).json(user);
+// }); 
 
 
 usersRoute.post('/register', async (req:Request<any,any,UserTypeDto,any>, resp: Response)=>{
@@ -35,9 +36,10 @@ usersRoute.post('/login',async (req: Request<any,any, UserTypeDto>,res)=>{
 });
 
 
-usersRoute.get('/:me', (req:Request<{me: string}>, resp: Response)=>{
+usersRoute.get('/:me',AuthMidware, (req:Request<{me: string}>, resp: Response)=>{
     const me = req.params.me;
-    resp.status(200).json({message: `Get user of id ${me}`});
+    const { username, email, firstName} = req.body.user;
+    resp.status(200).json({message: `Get user of id ${username} | ${email} | ${firstName}`});
 })
 
 export default usersRoute;
