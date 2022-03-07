@@ -1,9 +1,9 @@
 import { Request, NextFunction, Response } from "express";
 import jwt from 'jsonwebtoken';
 import { getCustomRepository } from "typeorm";
-import { IUser } from "../applications/users/interfaces/IUser";
-import Users from "../applications/users/users.model";
-import { UserRepository } from "../applications/users/users.service";
+import { IUser } from "../modules/users/interfaces/IUser";
+import Users from "../modules/users/users.model";
+import { UserRepository } from "../modules/users/users.service";
 import { appsettings } from "../config/appsettings";
 import GenResponse, { StatusCode } from "../config/GenResponse";
 

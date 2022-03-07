@@ -1,8 +1,8 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
-import goalRouter from "../applications/goals/goals.controller";
-import usersRoute from "../applications/users/users.controller";
+import goalRouter from "../modules/goals/goals.controller";
+import usersRoute from "../modules/users/users.controller";
 import { AuthMidware } from "../middleware/auth.middleware";
 
 async function ExtractReadMe(): Promise<string> {

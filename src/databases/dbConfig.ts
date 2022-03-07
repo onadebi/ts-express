@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import Goals from "../applications/goals/goals.model";
-import Users from "../applications/users/users.model";
+import Goals from "../modules/goals/goals.model";
+import Users from "../modules/users/users.model";
 import { appsettings } from "../config/appsettings";
 
 export const dbConfig =() => createConnection({
