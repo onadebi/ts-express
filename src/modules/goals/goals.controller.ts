@@ -13,6 +13,17 @@ type GoalType ={
     text: string;
 }
 
+/**
+   * @openapi
+   * /api/goals:
+   *  get:
+   *     tags:
+   *     - Goals
+   *     description: Provides user goals
+   *     responses:
+   *       200:
+   *         description: Valid response of goals
+   */
 goalRouter.get('/',async (req:Request, resp: Response)=>{
     const allGoals = await GetRepo().GetAllGoals();
     resp.status(allGoals.StatusCode).json(allGoals);

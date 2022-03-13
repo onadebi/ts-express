@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const appsettings ={
-    PORT: process.env.PORT,
+    PORT: process.env.APP_PORT,
     node_env: process.env.NODE_ENV,
     db_connection:{
         host: process.env.DB_HOST,
@@ -10,8 +10,9 @@ export const appsettings ={
         username:process.env.DB_USERNAME,
         password:process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
+        migrationsTableName: process.env.DB_MIGRATION_TABLE,
         synchronize: true,
-        logging:true
+        logging:false
     },
     GoalsConfig:{
         minGoalsLength: 3
