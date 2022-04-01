@@ -1,11 +1,11 @@
-import { isEmail } from "class-validator";
+import { IsEmail, isEmail, IsNotEmpty } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
-import { BaseTableFields } from "../common/BaseTableFields";
-import Goals from "../goals/goals.model";
-import { Gender } from "./models/gender";
+import { BaseTableFields } from "../../common/BaseTableFields";
+import Goal from "../../goals/entity/goal.entity";
+import { Gender } from "../models/gender";
 
 @Entity({name:'user'})
-class Users extends BaseTableFields {
+class User extends BaseTableFields {
 
     constructor(){
         super();
@@ -19,33 +19,37 @@ class Users extends BaseTableFields {
     username!: string;
 
     @Column({type: 'varchar', length:100, nullable:false, unique:true})
+    @IsEmail()
     email!: string;
 
-    @Column({type: 'varchar', length:100, name:'recovery_email'})
+    @Column({type: 'varchar', length:100, name:'recovery_email', nullable: true})
     recoveryEmail!: string;
 
     @Column({type: 'varchar', length:100, nullable:false})
+    @IsNotEmpty()
     password!: string;
 
     @Column({type:'nvarchar', length:100,nullable: false})
+    @IsNotEmpty()
     firstName!: string;
 
     @Column({type:'nvarchar', length:100,nullable: true})
     middleName!: string;
 
     @Column({type:'nvarchar', length:100,nullable: false})
+    @IsNotEmpty()
     lastName!: string;
 
-    @Column({type:'date'})
+    @Column({type:'date', nullable:true})
     dob?: Date;
 
     @Column({type:'varchar', length:20, default:()=> `'${Gender.NotSpecified}'`})
     gender!: Gender;
 
-    @Column({name:'contact_address'})
+    @Column({name:'contact_address', nullable:true})
     contactAddress!: string;
 
-    @Column({name:'mobile_phone'})
+    @Column({name:'mobile_phone', nullable:true})
     mobilephone!: string;
 
     @Column({type:'boolean', name:'is_validated', default: ()=> 'false'})
@@ -54,9 +58,9 @@ class Users extends BaseTableFields {
     @Column({type:'boolean', name:'is_blocked', default: ()=> 'false'})
     isBlocked!:boolean;
 
-    @OneToMany(type=> Goals,(goals: Goals)=> goals.userId,{eager:true})
-    goals?: Goals[];
+    @OneToMany(type=> Goal,(goals: Goal)=> goals.userId,{eager:true})
+    goals?: Goal[];
 
 }
 
-export default Users;
+export default User;

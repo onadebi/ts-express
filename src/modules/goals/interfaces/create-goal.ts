@@ -1,8 +1,8 @@
 import User from "../../users/entity/user.entity";
 
-export default interface IGoal{
+export interface CreateGoal{
     id?: number;
     title: string;
     details: string;
-    // userId: number | Users;
+    userId: User;
 }

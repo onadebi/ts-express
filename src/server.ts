@@ -1,8 +1,17 @@
 import express, {Express, Request} from "express";
 import cors from "cors";
 import { dbConfig } from "./databases/dbConfig";
+import { ConsoleLog } from "./utils/util-helper";
+import { LogType } from "./modules/common/enums/log-type.enum";
+import { client, SetToCache } from "./helpers/redisConfig";
 
-dbConfig().catch(err=> console.log(`Server Error connecting to db`));
+dbConfig().catch(err=> ConsoleLog(`Server Error connecting to db`,LogType.Exception));
+
+client.connect().then(()=> ConsoleLog(`Redis Cache connected successfully`))
+.catch((error)=>ConsoleLog(`Redis Cache failed to connecty`,LogType.Exception));
+
+SetToCache('goalzs', 'all goals',55)
+
 const app = express();
 
 export const server = (): Express => {

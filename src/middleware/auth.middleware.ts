@@ -2,7 +2,7 @@ import { Request, NextFunction, Response } from "express";
 import jwt from 'jsonwebtoken';
 import { getCustomRepository } from "typeorm";
 import { IUser } from "../modules/users/interfaces/IUser";
-import Users from "../modules/users/users.model";
+import User from "../modules/users/entity/user.entity";
 import { UserRepository } from "../modules/users/users.service";
 import { appsettings } from "../config/appsettings";
 import GenResponse, { StatusCode } from "../config/GenResponse";
@@ -14,7 +14,7 @@ export const AuthMidware =async (req: Request, resp: Response, next:NextFunction
         token = token.split(' ')[1];
         const verified = jwt.verify(token,appsettings.encryption.secreteKey!) as IUser;
         console.log(`VERIFIED Credentials is >>> ${JSON.stringify(verified)}`)
-        req.body.user = await (await getCustomRepository(UserRepository).GetUserByUsername(verified.username)).Data;
+        req.body.user = (await getCustomRepository(UserRepository).GetUserByUsername(verified.username)).Data;
         console.log(`info from AuthMidWare >> `,JSON.stringify(req.body.user,null,2))
         next();
     } catch (errr) {

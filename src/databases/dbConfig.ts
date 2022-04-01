@@ -1,8 +1,10 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import Goals from "../modules/goals/goals.model";
-import Users from "../modules/users/users.model";
+import Goal from "../modules/goals/entity/goal.entity";
+import User from "../modules/users/entity/user.entity";
 import { appsettings } from "../config/appsettings";
+import { ConsoleLog } from "../utils/util-helper";
+import { LogType } from "../modules/common/enums/log-type.enum";
 
 export const dbConfig =() => createConnection({
     name:'default',
@@ -12,8 +14,9 @@ export const dbConfig =() => createConnection({
     username: appsettings.db_connection.username,
     password: appsettings.db_connection.password,
     database: appsettings.db_connection.database,
+    synchronize:appsettings.db_connection.synchronize,
     entities: [
-        Users, Goals
+        User, Goal
     ],
     migrationsTableName: appsettings.db_connection.migrationsTableName,
     migrations: [`${__dirname}/../migrations/*{.ts,.js}`],
@@ -23,5 +26,5 @@ export const dbConfig =() => createConnection({
     // synchronize: appsettings.db_connection.synchronize,
     logging: appsettings.db_connection.logging
 }).then(connection => {
-    console.log(`Connected to database on port ${appsettings.db_connection.port}`)
-}).catch(error => console.log(error));
+    ConsoleLog(`Connected to database on port ${appsettings.db_connection.port}`,LogType.Info)
+}).catch(error => ConsoleLog(error,LogType.Exception));

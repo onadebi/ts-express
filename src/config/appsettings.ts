@@ -14,6 +14,10 @@ export const appsettings ={
         synchronize: true,
         logging:false
     },
+    cache_config:{
+        url: 'redis://localhost:6379',
+        prefix:'devApp'
+    },
     GoalsConfig:{
         minGoalsLength: 3
     },

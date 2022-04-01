@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { Connection, getCustomRepository } from 'typeorm';
+import { IUser } from '../users/interfaces/IUser';
 import { GoalsRepository } from './goals.service';
+import { CreateGoal } from './interfaces/create-goal';
 import IGoal from './interfaces/IGoal';
 const goalRouter = express.Router()
 
@@ -25,11 +27,25 @@ type GoalType ={
    *         description: Valid response of goals
    */
 goalRouter.get('/',async (req:Request, resp: Response)=>{
+    const user: IUser = req.body.user;
     const allGoals = await GetRepo().GetAllGoals();
     resp.status(allGoals.StatusCode).json(allGoals);
 })
-.post('/', async (req:Request<any,any, IGoal,any>, resp: Response)=>{
+
+/**
+   * @openapi
+   * /api/goals:
+   *  post:
+   *     tags:
+   *     - Goals
+   *     description: Create a user goal
+   *     responses:
+   *       200:
+   *         description: Valid response of created goal
+   */
+.post('/', async (req:Request<any,any, CreateGoal | any,any>, resp: Response)=>{
     const goal = req.body;
+    const user: IUser = req.body.user;
     const objResult = await getCustomRepository(GoalsRepository).CreateGoal(goal);
     return resp.status(objResult.StatusCode).json(objResult);
 });
