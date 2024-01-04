@@ -39,7 +39,7 @@ const AppSwaggerOptions: swaggerJsDoc.Options = {
 const swaggerSpec = swaggerJsDoc(AppSwaggerOptions);
 
 function swaggerDocs(app: Express, port: number) {
-  // Swagger page
+  // Swagger page with SwaggerUI express authorization for all endpoints
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec, {
     swaggerOptions: {
       securityDefinitions: {
