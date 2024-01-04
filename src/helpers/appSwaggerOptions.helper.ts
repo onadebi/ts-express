@@ -8,7 +8,7 @@ const AppSwaggerOptions: swaggerJsDoc.Options = {
     info: {
       title: "App Global",
       version: "0.0.1",
-      description: "App Description",
+      description: "Typescript Express API with Swagger",
       contact: {
         name: "Onaxsys Ventures",
         email: "info@onaxsys.com",
@@ -16,7 +16,7 @@ const AppSwaggerOptions: swaggerJsDoc.Options = {
       },
     },
     components: {
-      securitySchemas: {
+      securitySchemes: {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
@@ -40,7 +40,18 @@ const swaggerSpec = swaggerJsDoc(AppSwaggerOptions);
 
 function swaggerDocs(app: Express, port: number) {
   // Swagger page
-  app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+  app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec, {
+    swaggerOptions: {
+      securityDefinitions: {
+        bearerAuth: {
+          type: "apiKey",
+          in: "header",
+          name: "Authorization",
+          description: "Bearer token",
+        },
+      },
+    },
+  }));
 
   // Docs in JSON format
   app.get("/docs.json", (req: Request, res: Response) => {

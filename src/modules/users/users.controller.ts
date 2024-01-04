@@ -53,12 +53,61 @@ usersRoute.post('/register', async (req:Request<any,any,IUserRegistration,any>, 
 });
 
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IUserLogin:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
+ *       required:
+ *         - username
+ *         - password
+ *
+ * /api/users/login:
+ *  post:
+ *     tags:
+ *     - User
+ *     description: Login user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/IUserLogin'
+ *     responses:
+ *       200:
+ *         description: Valid response of login
+ *       404:
+ *         description: User not found
+ */
 usersRoute.post('/login',async (req: Request<any,any,IUserLogin>,res)=>{
     const objResp = await GetRepo().LoginUser(req.body);
     res.status(objResp.StatusCode).json(objResp)
 });
 
-
+/**
+ * @openapi
+ * /api/users/{me}:
+ *  get:
+ *     tags:
+ *      - User
+ *     description: Retrieves the current user
+ *     parameters:
+ *       - in: path
+ *         name: me
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The username of the current user
+ *     responses:
+ *       200:
+ *         description: Valid response of the current user
+ */
 usersRoute.get('/:me',AuthMidware, (req:Request<{me: string}>, resp: Response)=>{
     const me = req.params.me;
     const { username, email, firstName} = req.body.user;
