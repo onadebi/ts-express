@@ -133,9 +133,7 @@ export class UserRepository extends Repository<User>{
         return isGoalValid;
     }
 
-    _GetRepo(): Repository<User> {
-        return getRepository(User);
-    }
+    _GetRepo = (): Repository<User> => getRepository(User);
 
     _encryptContent = async (value: string): Promise<string> => {
         const salt = await bcrypt.genSalt(appsettings.encryption.length);
